@@ -1,0 +1,10 @@
+.vscode
+dist/
+node_modules/
+docs/.vuepress/.cache/
+docs/.vuepress/.temp/
+docs/.vuepress/dist/
+.cache/
+.temp/
+script/comsol/words.json
+script/comsol/words.md
