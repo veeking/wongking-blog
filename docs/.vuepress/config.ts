@@ -5,12 +5,11 @@ export default defineUserConfig({
   base: "/",
 
   dest: "./dist",
-
   locales: {
     "/": {
       lang: "zh-CN",
-      title: "博客演示",
-      description: "vuepress-theme-hope 的博客演示",
+      title: "漂流小岛",
+      description: "欢迎来到漂流小岛",
     }
   },
 

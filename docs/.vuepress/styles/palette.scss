@@ -1,2 +1,18 @@
 // you can change colors here
-$theme-color: #096dd9;
+@import './variables';
+
+$theme-color: $color-content-brand;
+
+$text-color: (
+  light: #2c3e50,
+  dark: $color-content-secondary,
+);
+
+$bg-color: (
+  light: #fff,
+  dark: $color-background-primary,
+);
+
+$font-family: '-apple-system, c, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif';
+$font-family-fancy: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif';
+// $font-family-fancy: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace';

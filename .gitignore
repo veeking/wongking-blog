@@ -8,3 +8,4 @@ docs/.vuepress/dist/
 .temp/
 script/comsol/words.json
 script/comsol/words.md
+*.mjs

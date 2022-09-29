@@ -2,11 +2,12 @@
 home: true
 layout: Blog
 # icon: home
-title: 博客主页
+title: 主页
 heroImage: /logo.svg
-heroText: 你博客的名称
+heroText: 漂流小岛
+# bgImage: //cdn.hhdd.com/frontend/as/i/48f6ec69-887f-5ccd-98c5-ad07d75ca33f.jpg
 heroFullScreen: true
-tagline: 你可以在这里放置你的口号与标语
+tagline: What do you live for?
 # projects:
 #   - icon: project
 #     name: 项目名称
@@ -37,8 +38,6 @@ tagline: 你可以在这里放置你的口号与标语
 #     name: 自定义项目
 #     desc: 自定义详细介绍
 #     link: https://你的自定义链接
-
-footer: <a href="https://www.baidu.com" target="_blank">你啊哈哈</a>
 ---
 
 <!-- 这是一个博客主页的案例。

@@ -9,17 +9,13 @@ export default hopeTheme({
   //   name: "Mr.Hope",
   //   url: "https://mrhope.site",
   // },
-
+  darkmode: "enable",
   iconAssets: "iconfont",
 
   logo: "/logo.svg",
-
   repo: "vuepress-theme-hope/vuepress-theme-hope",
-
-  docsDir: "docs",
-
-  pageInfo: ["Author", "Original", "Date", "Category", "Tag", "ReadingTime"],
-
+  // docsDir: "docs",
+  pageInfo: ["Author", "Original", "Date", "Category", "Tag"],
   blog: {
     // medias: {
       // Baidu: "https://example.com",
@@ -57,8 +53,8 @@ export default hopeTheme({
       // ],
     // },
   },
-
   locales: {
+    
     /**
      * Chinese locale config
      */
@@ -69,18 +65,20 @@ export default hopeTheme({
       // sidebar
       sidebar: zhSidebar,
 
-      // footer: "默认页脚",
-
+      footer: 'page页面页脚',
+      copyright: '无版权',
       displayFooter: true,
 
       blog: {
+        sidebarDisplay: 'none',
         description: "一个前端开发者",
         intro: "/intro.html",
+        // autoExcerpt: true,
       },
-
+      editLink: false
       // page meta
       // metaLocales: {
-      //   editLink: false
+      //    : false
       //   // editLink: "在 GitHub 上编辑此页",
       // },
     },
@@ -96,12 +94,10 @@ export default hopeTheme({
     blog: {
       autoExcerpt: true,
     },
-
     // If you don't need comment feature, you can remove following option
     // The following config is for demo ONLY, if you need comment feature, please generate and use your own config, see comment plugin documentation for details.
     // To avoid disturbing the theme developer and consuming his resources, please DO NOT use the following config directly in your production environment!!!!!
     comment: false,
-
     // Disable features you don't want here
     mdEnhance: {
       align: true,
