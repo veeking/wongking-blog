@@ -1,6 +1,10 @@
 // place your custom styles here
 @import './variables';
 
+.beian, .copyright {
+  color: var(--dark-grey);
+  font-family: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace';
+}
 .blog-info-list {
   .blog-type-button {
     svg {
