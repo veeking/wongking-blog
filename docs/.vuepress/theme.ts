@@ -131,18 +131,18 @@ export default hopeTheme({
       vpre: true,
       vuePlayground: true,
     },
-
-    pwa: {
-      favicon: "/favicon.ico",
-      manifest: {
-        icons: [
-          {
-            src: "/assets/icon/chrome-192.png",
-            sizes: "192x192",
-            type: "image/png",
-          }
-        ]
-      }
+    
+    // pwa: {
+    //   favicon: "/favicon.ico",
+    //   manifest: {
+    //     icons: [
+    //       {
+    //         src: "/assets/icon/chrome-192.png",
+    //         sizes: "192x192",
+    //         type: "image/png",
+    //       }
+    //     ]
+    //   }
     //   cacheHTML: true,
     //   cachePic: true,
     //   appendBase: true,
@@ -201,6 +201,6 @@ export default hopeTheme({
     //       },
     //     ],
     //   },
-    },
+    // },
   },
 });
