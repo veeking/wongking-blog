@@ -9,3 +9,4 @@ docs/.vuepress/dist/
 script/comsol/words.json
 script/comsol/words.md
 *.mjs
+.DS_Store

@@ -1,22 +1,18 @@
 import { hopeTheme } from "vuepress-theme-hope";
 import { zhNavbar } from "./navbar/index.js";
-import { zhSidebar } from "./sidebar/index.js";
+// import { zhSidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
   hostname: "https://mister-hope.github.io",
-
-  // author: {
-  //   name: "Mr.Hope",
-  //   url: "https://mrhope.site",
-  // },
   darkmode: "enable",
   iconAssets: "iconfont",
 
   logo: "/logo.svg",
   repo: "vuepress-theme-hope/vuepress-theme-hope",
-  // docsDir: "docs",
+  docsDir: "docs",
   pageInfo: ["Author", "Original", "Date", "Category", "Tag"],
   blog: {
+    sidebarDisplay: 'none',
     // medias: {
       // Baidu: "https://example.com",
       // Bitbucket: "https://example.com",
@@ -53,27 +49,27 @@ export default hopeTheme({
       // ],
     // },
   },
-  locales: {
-    "/": {
-      navbar: zhNavbar,
-      sidebar: zhSidebar,
-      footer: '<a target="_blank" rel="noopener noreferrer" class="beian" href="https://beian.miit.gov.cn">浙ICP备2022026851号-1</a>',
-      // copyright: 'veekingsen • © 2022 - 2023',
-      displayFooter: true,
-      blog: {
-        sidebarDisplay: 'none',
-        description: "一个前端开发者",
-        intro: "/intro.html",
-        // autoExcerpt: true,
-      },
-      editLink: false
-      // page meta
-      // metaLocales: {
-      //    : false
-      //   // editLink: "在 GitHub 上编辑此页",
-      // },
-    },
-  },
+  navbar: zhNavbar,
+  sidebar: false,
+  // copyright: 'veekingsen • © 2022 - 2023',
+  displayFooter: true,
+  editLink: false,
+  contributors: false,
+  lastUpdated: false,
+  footer: `
+   <div class="footer-bar">
+    <div>
+      <img  style="width: 15px;padding-bottom: 2px" src="/assets/beian.png">
+      <a target="_blank" href="https://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602012652" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/>
+        <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px;">浙公网安备 33010602012652号</p>
+      </a>
+    </div>
+    <div>
+      <a target="_blank" rel="noopener noreferrer" class="beian" href="https://beian.miit.gov.cn">浙ICP备2022026851号-1</a>
+    </div>
+   <div>
+
+  `,
 
   encrypt: {
     config: {
@@ -131,76 +127,5 @@ export default hopeTheme({
       vpre: true,
       vuePlayground: true,
     },
-    
-    // pwa: {
-    //   favicon: "/favicon.ico",
-    //   manifest: {
-    //     icons: [
-    //       {
-    //         src: "/assets/icon/chrome-192.png",
-    //         sizes: "192x192",
-    //         type: "image/png",
-    //       }
-    //     ]
-    //   }
-    //   cacheHTML: true,
-    //   cachePic: true,
-    //   appendBase: true,
-    //   apple: {
-    //     icon: "/assets/icon/apple-icon-152.png",
-    //     statusBarColor: "black",
-    //   },
-    //   msTile: {
-    //     image: "/assets/icon/ms-icon-144.png",
-    //     color: "#ffffff",
-    //   },
-    //   manifest: {
-    //     icons: [
-    //       {
-    //         src: "/assets/icon/chrome-mask-512.png",
-    //         sizes: "512x512",
-    //         purpose: "maskable",
-    //         type: "image/png",
-    //       },
-    //       {
-    //         src: "/assets/icon/chrome-mask-192.png",
-    //         sizes: "192x192",
-    //         purpose: "maskable",
-    //         type: "image/png",
-    //       },
-    //       {
-    //         src: "/assets/icon/chrome-512.png",
-    //         sizes: "512x512",
-    //         type: "image/png",
-    //       },
-    //       {
-    //         src: "/assets/icon/chrome-192.png",
-    //         sizes: "192x192",
-    //         type: "image/png",
-    //       },
-    //     ],
-    //     shortcuts: [
-    //       {
-    //         name: "Demo",
-    //         short_name: "Demo",
-    //         url: "/demo/",
-    //         icons: [
-    //           {
-    //             src: "/assets/icon/guide-maskable.png",
-    //             sizes: "192x192",
-    //             purpose: "maskable",
-    //             type: "image/png",
-    //           },
-    //           {
-    //             src: "/assets/icon/guide-monochrome.png",
-    //             sizes: "192x192",
-    //             purpose: "monochrome",
-    //             type: "image/png",
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // },
   },
 });
