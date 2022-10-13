@@ -3,11 +3,11 @@ home: true
 layout: Blog
 # icon: home
 title: 主页
-heroImage: /logo.svg
-heroText: 漂流小岛
-# bgImage: //cdn.hhdd.com/frontend/as/i/48f6ec69-887f-5ccd-98c5-ad07d75ca33f.jpg
+# heroImage: /logo.svg
+heroText: false
+bgImage: /dawn.jpg
 heroFullScreen: true
-tagline: What do you live for?
+tagline: Dawn is coming<br>Open your eyes
 # projects:
 #   - icon: project
 #     name: 项目名称
