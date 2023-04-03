@@ -3,7 +3,7 @@ import { zhNavbar } from "./navbar/index.js";
 // import { zhSidebar } from "./sidebar/index.js";
 
 export default hopeTheme({
-  hostname: "https://mister-hope.github.io",
+  // hostname: "https://mister-hope.github.io",
   darkmode: "enable",
   iconAssets: "iconfont",
 
@@ -49,6 +49,8 @@ export default hopeTheme({
       // ],
     // },
   },
+  repoDisplay: false,
+  author: 'J.Wong',
   navbar: zhNavbar,
   sidebar: false,
   // copyright: 'veekingsen • © 2022 - 2023',
