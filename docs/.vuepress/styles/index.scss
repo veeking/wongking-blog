@@ -29,6 +29,22 @@
 .blog-info-wrapper {
   display: none;
 }
+
+// code demo 
+.code-demo-header {
+  .toggle-button {
+    // reset css
+    padding: 0 !important;
+    width: 1.1em;
+    height: 1.1em;
+    margin: 0 10px 0 0 !important;
+  }
+  .title {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
 // footer
 .footer-bar {
   padding: 30px 0;

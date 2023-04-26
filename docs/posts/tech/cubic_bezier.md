@@ -22,7 +22,7 @@ star: true
 
 ## 什么是三次贝塞尔曲线？
 
-在了解`三次(三阶)贝塞尔曲线(Cubic Bézier curve)`概念之前，我们首先需要了解`一次(阶)塞尔曲线(Bézier curve)`的基本定理。
+在了解`三次(三阶)贝塞尔曲线`概念之前，我们首先需要了解`一次(阶)塞尔曲线`的基本定理。
 `一次贝塞尔曲线`是只由两个控制点组成，即`P0`和`P1`，实际上就是一条直线，可以通过`线性插值（插入新的点值）lerp`公式表示：
 $$ B(t) = (1-t)P0 + tP1 $$
 其中，`t`是一个介于`0和1`之间的参数，当`t`从`0到1`不断变化时，$(1-t)P_0$ 使得点 $P_0$ 的权重逐渐减小，趋向0。而 $tP_1$ 使得点 $P_1$ 的权重逐渐增加，趋向1。这样，$B(t)$ 点会沿着 $P_0$ 到 $P_1$ 之间的直线移动，从而形成一条连接 $P_0$ 和 $P_1$ 的线段。
@@ -30,7 +30,7 @@ $$ B(t) = (1-t)P0 + tP1 $$
 ![图 42](/assets/posts/0396af62953e17b32eea0c43a4d4f3aaeaef28f39521702fde035acd5645f992.gif)  
 
 
-现在，我们要**根据一次贝塞尔曲线公式推导出出三次贝塞尔曲线公式**。对于`三次贝塞尔曲线`，我们有`四个控制点`：`P0`、`P1`、`P2` 和 `P3`。我们可以分解为以下步骤：
+现在，我们要**根据一次贝塞尔曲线公式推导出三次贝塞尔曲线公式**。对于`三次贝塞尔曲线`，我们有`四个控制点`：`P0`、`P1`、`P2` 和 `P3`。我们可以分解为以下步骤：
 1. 在 `P0 和 P1` 之间进行线性插值，得到`点A`：$A = (1-t) * P0 + t * P1$
 2. 在 `P1 和 P2` 之间进行线性插值，得到`点B`：$B = (1-t) * P1 + t * P2$
 3. 在 `P2 和 P3` 之间进行线性插值，得到`点C`：$C = (1-t) * P2 + t * P3$
@@ -93,6 +93,35 @@ function getCubicBezierPoint(t, p0, p1, p2, p3) {
   height: 400px;
   margin: 0 auto;
 }
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 150px;
+  height: 20px;
+  background: transparent;
+  transform: translateY(4px);
+}
+
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #ccc;
+  height: 2px;
+}
+
+input[type="range"]::-moz-range-track {
+  background-color: #ccc;
+  height: 2px;
+}
+
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #f1c40f;
+  cursor: pointer;
+  border-radius: 50%;
+  transform: translateY(-9px);
+}
 canvas {}
 ```
 ```html
@@ -131,7 +160,7 @@ const p3 = {x: 500, y: 30};
 let stepSizeValue = parseFloat(stepSizeInput.value)
 stepSizeValueEl.innerHTML = stepSizeValue
 
-function drawCubicBezierCurve(stepSize) {
+const drawCubicBezierCurve = (stepSize) => {
   console.log(canvas.width)
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -172,11 +201,10 @@ drawCubicBezierCurve(stepSizeValue);
 
 ## 三次贝塞尔曲线与Web动画
 
-在Web中，三次贝塞尔曲线广泛应用于矢量图形、动画、图形设计和用户界面设计等方面。在Web动画方面，它不仅能创建复杂形状的`路径动画`，还能定义平滑过渡效果的[缓动函数动画](https://cubic-bezier.com/)。接下来，我们将详细探讨基于三次贝塞尔曲线实现的`路径动画`和`缓动动画`。
-
+`三次贝塞尔曲线`在Web动画领域有着广泛的应用，它不仅能创建复杂形状的`路径动画`，还能定义平滑过渡效果的[缓动函数动画](https://cubic-bezier.com/)。下面，我们将详细探讨**基于三次贝塞尔曲线**实现的`路径动画`和`缓动动画`。
 
 ### 路径动画
-通过三次贝塞尔曲线的图形路径，让图形对象沿着这些路径进行运动。实现方式有`SVG`和`Canvas`。
+`路径动画`是一种沿着预先定义的路径移动图形元素的动画。通过使用`三次贝塞尔曲线`，我们可以先创建复杂且平滑的路径，然后让动画元素能够沿着这些路径进行移动。实现方式有`SVG`和`Canvas`两种方式。
 
 #### SVG路径动画
 `SVG`有两种方式可以实现路径运动，分别是`animateMotion`和`offset-path`，但是本质都是通过`<path>`元素中的`d`属性进行初始化路径绘制操作。下面是两种实现方式的代码示例：
@@ -196,7 +224,7 @@ drawCubicBezierCurve(stepSizeValue);
 ```
 :::
 
-::: normal-demo (点击展开代码) offset-path实现
+::: normal-demo (点击展开代码) offset-path实现(兼容不佳)
 ```css
  .motion-target {
    position: absolute;
@@ -204,12 +232,16 @@ drawCubicBezierCurve(stepSizeValue);
    height: 20px;
    background-color: #EDE5C0;
    border-radius: 50%;
+   -webkit-offset-path: path("M50,150 C180,-100 350,350 450,30");
    offset-path: path("M50,150 C180,-100 350,350 450,30");
    animation: motionMoving 5s linear infinite;
  }
  
  @keyframes motionMoving {
-   100% { offset-distance: 100%; }
+   100% { 
+     offset-distance: 100%;
+     -webkit-offset-distance: 100%;
+   }
  }
 ```
 ```html
@@ -230,7 +262,7 @@ drawCubicBezierCurve(stepSizeValue);
 `animateMotion`通过`<animateMotion>`元素来实现沿路径移动的动画。它将动画与特定的SVG元素（如`<circle>`）关联，并通过`<mpath>`元素引用要沿着的路径。可以实现让SVG元素沿着复杂的路径进行动画，但**仅限于SVG内部元素**。
 
 `offset-path`则使用CSS属性`offset-path`定义动画路径。通过`path("MP0 CP1 P2 P3")`来设置路径数据，并使用`offset-distance: n%;`来确定元素相对于路径起点的位置，配合
-`@keyframes`关键帧实现跟随路径动画。
+`@keyframes`关键帧实现跟随路径动画。但目前为止，[Can I Use](https://caniuse.com/?search=offset-path)上显示`offset-path`在移动端低版本浏览器上**兼容性不佳**。
 
 #### Canvas路径动画
 ::: normal-demo (点击展开代码) Canvas实现
@@ -253,7 +285,7 @@ const ball = { x: 0, y: 0, radius: 10 };
 const duration = 5000;
 let startTime = performance.now();
 
-function draw() {
+const draw = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // 绘制路径
   ctx.beginPath();
@@ -269,25 +301,26 @@ function draw() {
   ctx.fill();
 }
 
-function update(time) {
-   let elapsedTime = (time - startTime);
-   let progress = Math.max(Math.min(elapsedTime / duration, 1), 0);
-   let t = progress;
+const update = (time) => {
+  let elapsedTime = (time - startTime);
+  let progress = Math.max(Math.min(elapsedTime / duration, 1), 0);
+  let t = progress;
 
-   if (progress >= 1) {
-    progress = 0
-    startTime = performance.now();
-   }
+  if (progress >= 1) {
+  progress = 0
+  startTime = performance.now();
+  }
 
-   ball.x = getCubicBezierPoint(t, SP.x, CP1.x, CP2.x, EP.x);
-   ball.y = getCubicBezierPoint(t, SP.y, CP1.y, CP2.y, EP.y);
+  ball.x = getCubicBezierPoint(t, SP.x, CP1.x, CP2.x, EP.x);
+  ball.y = getCubicBezierPoint(t, SP.y, CP1.y, CP2.y, EP.y);
 }
 
-function animate(time) {
+const animate = (time) => {
   update(time);
   draw();
   requestAnimationFrame(animate);
 }
+
 function getCubicBezierPoint(t, p0, p1, p2, p3) {
   const t2 = Math.pow(t, 2)
   const t3 = Math.pow(t, 3)
@@ -336,774 +369,803 @@ canvas, svg {
 </select>
 ```
 ```javascript
-// constants.js
-const DRAWING_STRATEGY_CANVAS = 'canvas'
-const DRAWING_STRATEGY_SVG = 'svg'
-const START_POINT_COLOR = 'red'
-const CONTROL1_POINT_COLOR = 'green'
-const CONTROL2_POINT_COLOR = 'blue'
-const END_POINT_COLOR = 'purple'
-const GUIDE_LINE_COLOR = '#cccccc'
-const BEZIER_CURVE_COLOR = 'orange'
+(function() {
+  // constants.js
+  const DRAWING_STRATEGY_CANVAS = 'canvas'
+  const DRAWING_STRATEGY_SVG = 'svg'
+  const START_POINT_COLOR = 'red'
+  const CONTROL1_POINT_COLOR = 'green'
+  const CONTROL2_POINT_COLOR = 'blue'
+  const END_POINT_COLOR = 'purple'
+  const GUIDE_LINE_COLOR = '#cccccc'
+  const BEZIER_CURVE_COLOR = 'orange'
 
-const POINT_TYPES = {
-  START_POINT: 'startPoint',
-  CONSTROL_POINT_1: 'controlPoint1',
-  CONSTROL_POINT_2: 'controlPoint2',
-  END_POINT: 'endPoint',
-  NONE: 'none'
-}
-
-const DRAWING_STATUS = {
-  START_POINT: POINT_TYPES.START_POINT,
-  CONSTROL_POINT_1: POINT_TYPES.CONSTROL_POINT_1,
-  CONSTROL_POINT_2: POINT_TYPES.CONSTROL_POINT_2,
-  END_POINT: POINT_TYPES.END_POINT,
-  COMPLETE: 'complete'
-}
-
-const DRAWING_DEFAULT_STRATEGY = DRAWING_STRATEGY_CANVAS
-
-// 曲线绘制创建工厂
-function createDrawingFactory(type) {
-  switch (type) {
-    case DRAWING_STRATEGY_CANVAS:
-      return new CanvasDrawingStrategy(canvas)
-    case DRAWING_STRATEGY_SVG:
-      return new SvgDrawingStrategy(svg)
-    default:
-      throw new Error('Invalid drawing strategy type')
-  }
-}
-
-// 三次贝塞尔曲线控制器
-// 负责创建并控制三次贝塞尔曲线的绘制、动画、重置以及切换绘制策略等
-class CubicBezierController {
-  constructor(options) {
-    this.createDrawingFactory = options?.createDrawingFactory
-    this.movingAnimator = options?.movingAnimator
-    this.mode = options?.mode || DRAWING_DEFAULT_STRATEGY
-    this.drawer = this.createDrawer(this.mode)
-  }
-  
-  createDrawer(mode) {
-    const drawer = this.createDrawingFactory(mode)
-    this.movingAnimator.addObserver(drawer)
-    return drawer
+  const POINT_TYPES = {
+    START_POINT: 'startPoint',
+    CONSTROL_POINT_1: 'controlPoint1',
+    CONSTROL_POINT_2: 'controlPoint2',
+    END_POINT: 'endPoint',
+    NONE: 'none'
   }
 
-  switch(type = DRAWING_STRATEGY_CANVAS) {
-    if (this.drawer) {
-      this.movingAnimator.reset()
-    }
-    this.drawer = this.createDrawer(type)
+  const DRAWING_STATUS = {
+    START_POINT: POINT_TYPES.START_POINT,
+    CONSTROL_POINT_1: POINT_TYPES.CONSTROL_POINT_1,
+    CONSTROL_POINT_2: POINT_TYPES.CONSTROL_POINT_2,
+    END_POINT: POINT_TYPES.END_POINT,
+    COMPLETE: 'complete'
   }
 
-  reset() {
-    this.drawer.reset()
-  }
+  const DRAWING_DEFAULT_STRATEGY = DRAWING_STRATEGY_CANVAS
 
-  play() {
-    const points = this.drawer.getPoints()
-    this.movingAnimator.startAnimation(points)
-  }
-
-}
-
-// 移动小球动画类
-// 基于观察者简单实现： 当movingCircle被观察者 每帧发生变化 就通知所有观察者负责执行对应的操作
-class MovingCircleAnimator {
-  constructor(options) {
-    this.duration = options?.duration || 2000
-    this.observers = new Set()
-    this.circle = {
-      x: 0, 
-      y: 0,
-      type: 'circle',
-      color: '#00B3FF',
-      radius: 10
-    }
-    this.movingPoints = []
-    this.animationFrameId = 0
-    this.animationStartTime = 0
-  }
-
-  addObserver(observer) {
-    this.observers.add(observer)
-  }
-
-  removeObserver(observer) {
-    this.observers.delete(observer)
-  }
-
-  notify() {
-    const { circle } = this
-    this.observers.forEach(observer => observer.animate(circle))
-  }
-
-  startAnimation(points) {
-    this.animationStartTime = performance.now()
-    this.movingPoints = points
-    this.animationFrameId = requestAnimationFrame(this.animateFrame.bind(this))
-  }
-
-  stopAnimation() {
-    if (this.animationFrameId) {
-      this.animationFrameId = cancelAnimationFrame(this.animateFrame.bind(this))
-    }
-  }
-
-  animateFrame(timestamp) {
-    const { duration, animationStartTime, movingPoints } = this
-    let progress = (timestamp - animationStartTime) / duration
-    
-    progress = Math.min(Math.floor(progress * 100) / 100, 1)
-
-    this.movingWithCubicBezier(progress, movingPoints)
-   
-    this.notify()
-    
-    if (progress >= 1) {
-      this.stopAnimation()
-      return
-    }
-    this.animationFrameId = requestAnimationFrame(this.animateFrame.bind(this))
-  }
-
-  movingWithCubicBezier(progress, points) {
-    const xCoords = points.map(point => point.x)
-    const yCoords = points.map(point => point.y)
-    // progress为x时间进度，可以假设x = t，单调递增，getBezierCurvePoint(progress, ...xCoords)表示求（对应坐标的）y运动值
-    this.circle.x = getBezierCurvePoint(progress, ...xCoords)
-    this.circle.y = getBezierCurvePoint(progress, ...yCoords)
-  }
-
-  reset() {
-    this.circle.x = 0
-    this.circle.y = 0
-    this.movingPoints = []
-    this.animationFrameId = 0
-    this.animationStartTime = 0
-    this.observers.clear()
-  }
-}
-
-// 绘制策略基类
-class DrawingStrategy {
-  constructor() {
-    this.startPoint = this._generatePoint({ color: START_POINT_COLOR })
-    this.controlPoint1 = this._generatePoint({ color: CONTROL1_POINT_COLOR })
-    this.controlPoint2 = this._generatePoint({ color: CONTROL2_POINT_COLOR })
-    this.endPoint = this._generatePoint({ color: END_POINT_COLOR })
-
-    this.drawingStateManager = new DrawingStateManager()
-
-    this.drawingStateManager.addActions({
-      [DRAWING_STATUS.START_POINT]: {
-        onMousedown: this.handleStartPointClick.bind(this),
-      },
-      [DRAWING_STATUS.CONSTROL_POINT_1]: {
-        onMousedown: this.handleControlPoint1Click.bind(this),
-      },
-      [DRAWING_STATUS.CONSTROL_POINT_2]: {
-        onMousedown: this.handleControlPoint2Click.bind(this),
-      },
-      [DRAWING_STATUS.END_POINT]: {
-        onMousedown: this.handleEndPointClick.bind(this),
-      },
-      [DRAWING_STATUS.COMPLETE]: {
-        onMousedown: this.handleCompleteClick.bind(this)
-      }
-    })
-
-
-    this.guidelineWidth = 2
-    this.guidelineColor = GUIDE_LINE_COLOR
-
-    this.bezierCurveWidth = 5
-    this.bezierCurveColor = BEZIER_CURVE_COLOR
-
-    this.draggingPointType = POINT_TYPES.NONE
-  }
-  handleMouseDown(event) {}
-  handleMouseMove(event) {}
-  handleMouseUp(event) {
-    this.draggingPointType = POINT_TYPES.NONE
-  }
-  handleDragging(position) {
-    // 根据当前draggingPointType类型 更新对应的坐标点
-    const pointMap = {
-      [POINT_TYPES.START_POINT]: this.startPoint,
-      [POINT_TYPES.CONSTROL_POINT_1]: this.controlPoint1,
-      [POINT_TYPES.CONSTROL_POINT_2]: this.controlPoint2,
-      [POINT_TYPES.END_POINT]: this.endPoint,
-    }
-    if (pointMap[this.draggingPointType]) {
-      pointMap[this.draggingPointType].x =  position?.x
-      pointMap[this.draggingPointType].y =  position?.y
-    }
-  }
-  handleDrawing(position, state) {}
-
-  handleStartPointClick(position) {
-    const { x, y } = position
-    this.startPoint.x = x
-    this.startPoint.y = y
-    this.drawingStateManager.change(DRAWING_STATUS.CONSTROL_POINT_1)
-  }
-  handleControlPoint1Click(position) {
-    const { x, y } = position
-    if (pointInCircle(position, this.startPoint)) {
-      this.draggingPointType = POINT_TYPES.START_POINT
-      return
-    } 
-    this.controlPoint1.x = x
-    this.controlPoint1.y = y
-    this.drawingStateManager.change(DRAWING_STATUS.CONSTROL_POINT_2)
-  }
-  handleControlPoint2Click(position) {
-    const { x, y } = position
-    if (pointInCircle(position, this.startPoint)) {
-      this.draggingPointType = POINT_TYPES.START_POINT
-      return
-    }  else if (pointInCircle(position, this.controlPoint1)) {
-      this.draggingPointType = POINT_TYPES.CONSTROL_POINT_1
-      return
-    }
-    this.controlPoint2.x = x
-    this.controlPoint2.y = y
-    this.drawingStateManager.change(DRAWING_STATUS.END_POINT)
-  }
-  
-  handleEndPointClick(position) {
-    const { x, y } = position
-    if (pointInCircle(position, this.startPoint)) {
-      this.draggingPointType = POINT_TYPES.START_POINT
-      return
-    }  else if (pointInCircle(position, this.controlPoint1)) {
-      this.draggingPointType = POINT_TYPES.CONSTROL_POINT_1
-      return
-    } else if (pointInCircle(position, this.controlPoint2)) {
-      this.draggingPointType = POINT_TYPES.CONSTROL_POINT_2
-      return
-    }
-    this.endPoint.x = x
-    this.endPoint.y = y
-    this.drawingStateManager.change(DRAWING_STATUS.COMPLETE)
-  }
-
-  handleCompleteClick(position) {
-    if (pointInCircle(position, this.startPoint)) {
-      this.draggingPointType = POINT_TYPES.START_POINT
-    }  else if (pointInCircle(position, this.controlPoint1)) {
-      this.draggingPointType = POINT_TYPES.CONSTROL_POINT_1
-    } else if (pointInCircle(position, this.controlPoint2)) {
-      this.draggingPointType = POINT_TYPES.CONSTROL_POINT_2
-    } else if (pointInCircle(position, this.endPoint)) {
-      this.draggingPointType = POINT_TYPES.END_POINT
-    }
-  }
-  resetPoints() {
-    this.startPoint = { ...this.startPoint, ...{ x: 0, y: 0 } }
-    this.controlPoint1 = { ...this.controlPoint1, ...{ x: 0, y: 0 } }
-    this.controlPoint2 = { ...this.controlPoint2, ...{ x: 0, y: 0 } }
-    this.endPoint = { ...this.endPoint, ...{ x: 0, y: 0 } }
-
-  }
-  getPoints() {
-    return [
-      this.startPoint,
-      this.controlPoint1,
-      this.controlPoint2,
-      this.endPoint
-    ]
-  }
-
-  update() {}
-  draw() {}
-  animate(animator) {}
-  reset() {}
-  destroy() {}
-
-  isEmptyPoint(point) {
-    return point?.x === 0 && point?.y === 0
-  }
-  _generatePoint({ x= 0, y = 0, radius = 8, color = '#000'} = {}) {
-    console.log(color)
-    return {
-      x,
-      y,
-      radius,
-      color
-    }
-  }
-}
-
-// Canvas渲染绘制策略类
-class CanvasDrawingStrategy extends DrawingStrategy {
-  constructor(canvas) {
-    super()
-    this.canvas = canvas
-    this.ctx = canvas.getContext('2d')
-    this.boundHandleMouseDown = this.handleMouseDown.bind(this)
-    this.boundHandleMouseMove = this.handleMouseMove.bind(this)
-    this.boundHandleMouseUp = this.handleMouseUp.bind(this)
-    this._bindEvent()
-  }
-
-  animate(animator) {
-    this.draw()
-    this.drawAnimator(animator)
-  }
-  
-  reset() {
-    this.drawingStateManager.reset()
-    this.resetPoints()
-    this.clear()
-  }
-  
-  draw() {
-    const { ctx, startPoint, controlPoint1, controlPoint2, endPoint } = this 
-    const currentState = this.drawingStateManager.state
-    const drawPoints = [startPoint, controlPoint1, controlPoint2, endPoint]
-
-    this.clear()
-
-    if (!this.isEmptyPoint(startPoint) && !this.isEmptyPoint(controlPoint1)) {
-      this.drawGuideline(drawPoints)
-    }
-    
-
-    if (currentState === DRAWING_STATUS.COMPLETE) {
-      this.drawBezierCurve(drawPoints)
-    }
-
-    drawPoints.forEach(point => {
-      if (!this.isEmptyPoint(point)) {
-        this.drawCircle(point)
-      }
-    })
-  }
-  drawAnimator(animator) {
-    const { type = '' } = animator
-
+  // 曲线绘制创建工厂
+  function createDrawingFactory(type) {
     switch (type) {
-      case 'circle': 
-        this.drawCircle(animator)
-        break
-      default: 
-        console.log('The type is unknown')
+      case DRAWING_STRATEGY_CANVAS:
+        return new CanvasDrawingStrategy(canvas)
+      case DRAWING_STRATEGY_SVG:
+        return new SvgDrawingStrategy(svg)
+      default:
+        throw new Error('Invalid drawing strategy type')
     }
   }
 
-  drawGuideline(points = []) {
-    const { ctx, guidelineWidth, guidelineColor } = this
-    if (points.length < 2) {
-      return
+  // 三次贝塞尔曲线控制器
+  // 负责创建并控制三次贝塞尔曲线的绘制、动画、重置以及切换绘制策略等
+  class CubicBezierController {
+    constructor(options) {
+      this.createDrawingFactory = options?.createDrawingFactory
+      this.movingAnimator = options?.movingAnimator
+      this.mode = options?.mode || DRAWING_DEFAULT_STRATEGY
+      this.drawer = this.createDrawer(this.mode)
+    }
+    
+    createDrawer(mode) {
+      const drawer = this.createDrawingFactory(mode)
+      this.movingAnimator.addObserver(drawer)
+      return drawer
     }
 
-    ctx.beginPath()
-    ctx.moveTo(points[0]?.x, points[0]?.y)
+    switch(type = DRAWING_STRATEGY_CANVAS) {
+      if (this.drawer) {
+        this.movingAnimator.reset()
+      }
+      this.drawer = this.createDrawer(type)
+    }
 
-    for (let i = 1; i < points.length; i++) {
-      const point = points[i]
-      if (!this.isEmptyPoint(point)) {
-        ctx.lineTo(point.x, point.y)
+    reset() {
+      this.drawer.reset()
+    }
+
+    play() {
+      const points = this.drawer.getPoints()
+      this.movingAnimator.startAnimation(points)
+    }
+
+  }
+
+  // 移动小球动画类
+  // 基于观察者简单实现： 当movingCircle被观察者 每帧发生变化 就通知所有观察者负责执行对应的操作
+  class MovingCircleAnimator {
+    constructor(options) {
+      this.duration = options?.duration || 2000
+      this.observers = new Set()
+      this.circle = {
+        x: 0, 
+        y: 0,
+        type: 'circle',
+        color: '#00B3FF',
+        radius: 10
+      }
+      this.movingPoints = []
+      this.animationFrameId = 0
+      this.animationStartTime = 0
+    }
+
+    addObserver(observer) {
+      this.observers.add(observer)
+    }
+
+    removeObserver(observer) {
+      this.observers.delete(observer)
+    }
+
+    notify() {
+      const { circle } = this
+      this.observers.forEach(observer => observer.animate(circle))
+    }
+
+    startAnimation(points) {
+      this.animationStartTime = performance.now()
+      this.movingPoints = points
+      this.animationFrameId = requestAnimationFrame(this.animateFrame.bind(this))
+    }
+
+    stopAnimation() {
+      if (this.animationFrameId) {
+        this.animationFrameId = cancelAnimationFrame(this.animateFrame.bind(this))
       }
     }
 
-    ctx.lineWidth = guidelineWidth
-    ctx.strokeStyle = guidelineColor
-    ctx.stroke()
-  }
+    animateFrame(timestamp) {
+      const { duration, animationStartTime, movingPoints } = this
+      let progress = (timestamp - animationStartTime) / duration
+      
+      progress = Math.min(Math.floor(progress * 100) / 100, 1)
 
-  drawSegmentByPoint(point, position) {
-    const points = [
-      this.startPoint,
-      this.controlPoint1,
-      this.controlPoint2
-    ]
-
-    const drawingPoints = [
-      ...points.slice(0, points.indexOf(point) + 1),
-      position
-    ]
-    this.drawGuideline(drawingPoints)
-  }
-
-  drawBezierCurve(points = []) {
-    const { ctx, bezierCurveWidth, bezierCurveColor } = this
-    ctx.beginPath()
-    ctx.moveTo(points[0]?.x, points[0]?.y)
-    ctx.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[3].x, points[3].y)
-    ctx.lineWidth = bezierCurveWidth
-    ctx.strokeStyle = bezierCurveColor
-    ctx.stroke()
-  }
-
-  drawCircle(point) {
-    const { ctx } = this
-    ctx.beginPath()
-    ctx.arc(point.x, point.y, point.radius, 0, 2 * Math.PI)
-    ctx.fillStyle = point.color
-    ctx.fill()
-  }
-
-  clear() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-  }
-
-  handleMouseDown(event) {
-    const currentState = this.drawingStateManager.state
-    const mousePosition = getMousePosition(event)
-    this.drawingStateManager.states[currentState].onMousedown(mousePosition)
-    this.draw()
-  }
-  handleMouseMove(event) {
-    const mousePosition = getMousePosition(event)
-    const currentState = this.drawingStateManager.state
-
-    if (this.draggingPointType === POINT_TYPES.NONE && 
-      (currentState === DRAWING_STATUS.START_POINT || currentState === DRAWING_STATUS.COMPLETE)) {
-      return 
-    }
-
-    this.draw()
-
-    if (this.draggingPointType !== POINT_TYPES.NONE) {
-      this.handleDragging(mousePosition)
-    } else {
-      this.handleDrawing(mousePosition, currentState)
-    }
-  }
-
-  handleDrawing(position, status) {
-    if (status === DRAWING_STATUS.CONSTROL_POINT_1 && !this.isEmptyPoint(this.startPoint)) {
-      this.drawSegmentByPoint(this.startPoint, position)
-    } else if (status === DRAWING_STATUS.CONSTROL_POINT_2 && !this.isEmptyPoint(this.controlPoint1)) {
-      this.drawSegmentByPoint(this.controlPoint1, position)
-    } else if (status === DRAWING_STATUS.END_POINT && !this.isEmptyPoint(this.controlPoint2)) {
-      this.drawSegmentByPoint(this.controlPoint2, position)
-    }
-  }
-
-  _bindEvent() {
-    const { canvas } = this
-    canvas.addEventListener('mousedown', this.boundHandleMouseDown)
-    canvas.addEventListener('mousemove', this.boundHandleMouseMove)
-    canvas.addEventListener('mouseup', this.boundHandleMouseUp)
-  }
-  _removeEvent() {
-    const { canvas } = this
-    canvas.removeEventListener('mousedown', this.boundHandleMouseDown)
-    canvas.removeEventListener('mousemove', this.boundHandleMouseMove)
-    canvas.removeEventListener('mouseup', this.boundHandleMouseUp)
-  }
-
-  destroy() {
-    this.reset()
-    this._removeEvent()
-  }
-}
-
-// Svg渲染绘制策略类
-class SvgDrawingStrategy extends DrawingStrategy {
-  constructor(canvas) {
-    super()
-    this.svg = svg
-    this.boundHandleMouseDown = this.handleMouseDown.bind(this)
-    this.boundHandleMouseMove = this.handleMouseMove.bind(this)
-    this.boundHandleMouseUp = this.handleMouseUp.bind(this)
-    this._bindEvent()
-  }
-
-  animate(animator) {
-    this.draw()
-    this.drawAnimator(animator)
-  }
-  
-  reset() {
-    this.drawingStateManager.reset()
-    this._removeEvent()
-    this.resetPoints()
-    this.clear()
-  }
-
-  draw() {
-    const { ctx, startPoint, controlPoint1, controlPoint2, endPoint } = this 
-    const currentState = this.drawingStateManager.state
-    const drawPoints = [startPoint, controlPoint1, controlPoint2, endPoint]
-
-    this.clear()
-
-    if (!this.isEmptyPoint(startPoint) && !this.isEmptyPoint(controlPoint1)) {
-      this.drawGuideline(drawPoints)
-    }
-
-    if (currentState === DRAWING_STATUS.COMPLETE) {
-      this.drawBezierCurve(drawPoints)
-    }
-
-    drawPoints.forEach(point => {
-      if (!this.isEmptyPoint(point)) {
-        this.drawCircle(point)
+      this.movingWithCubicBezier(progress, movingPoints)
+    
+      this.notify()
+      
+      if (progress >= 1) {
+        this.stopAnimation()
+        return
       }
-    })
-  }
+      this.animationFrameId = requestAnimationFrame(this.animateFrame.bind(this))
+    }
 
-  drawAnimator(animator) {
-    const { type = '' } = animator
+    movingWithCubicBezier(progress, points) {
+      const xCoords = points.map(point => point.x)
+      const yCoords = points.map(point => point.y)
+      // progress为x时间进度，可以假设x = t，单调递增，getBezierCurvePoint(progress, ...xCoords)表示求（对应坐标的）y运动值
+      this.circle.x = getBezierCurvePoint(progress, ...xCoords)
+      this.circle.y = getBezierCurvePoint(progress, ...yCoords)
+    }
 
-    switch (type) {
-      case 'circle': 
-        this.drawCircle(animator)
-        break
-      default: 
-        console.log('The type is unknown')
+    reset() {
+      this.circle.x = 0
+      this.circle.y = 0
+      this.movingPoints = []
+      this.animationFrameId = 0
+      this.animationStartTime = 0
+      this.observers.clear()
     }
   }
 
-  drawGuideline(points = []) {
-    const { ctx, guidelineWidth, guidelineColor } = this
+  // 绘制策略基类
+  class DrawingStrategy {
+    constructor() {
+      this.startPoint = this._generatePoint({ color: START_POINT_COLOR })
+      this.controlPoint1 = this._generatePoint({ color: CONTROL1_POINT_COLOR })
+      this.controlPoint2 = this._generatePoint({ color: CONTROL2_POINT_COLOR })
+      this.endPoint = this._generatePoint({ color: END_POINT_COLOR })
 
-    let moveToPath = `M${points[0].x} ${points[0].y}`
-    let linePaths = []
-    let pathString = ''
+      this.drawingStateManager = new DrawingStateManager()
 
-    // L${points[1].x} ${points[1].y} L${points[2]?.x} ${points[2]?.y} L${points[3]?.x} ${points[3]?.y}
-    for (let i = 1; i < points.length; i++) {
-      const point = points[i]
-      if (!this.isEmptyPoint(point)) {
-        linePaths.push(`L${point.x} ${point.y}`)
+      this.drawingStateManager.addActions({
+        [DRAWING_STATUS.START_POINT]: {
+          onMousedown: this.handleStartPointClick.bind(this),
+        },
+        [DRAWING_STATUS.CONSTROL_POINT_1]: {
+          onMousedown: this.handleControlPoint1Click.bind(this),
+        },
+        [DRAWING_STATUS.CONSTROL_POINT_2]: {
+          onMousedown: this.handleControlPoint2Click.bind(this),
+        },
+        [DRAWING_STATUS.END_POINT]: {
+          onMousedown: this.handleEndPointClick.bind(this),
+        },
+        [DRAWING_STATUS.COMPLETE]: {
+          onMousedown: this.handleCompleteClick.bind(this)
+        }
+      })
+
+
+      this.guidelineWidth = 2
+      this.guidelineColor = GUIDE_LINE_COLOR
+
+      this.bezierCurveWidth = 5
+      this.bezierCurveColor = BEZIER_CURVE_COLOR
+
+      this.draggingPointType = POINT_TYPES.NONE
+    }
+    handleMouseDown(event) {}
+    handleMouseMove(event) {}
+    handleMouseUp(event) {
+      this.draggingPointType = POINT_TYPES.NONE
+    }
+    handleDragging(position) {
+      // 根据当前draggingPointType类型 更新对应的坐标点
+      const pointMap = {
+        [POINT_TYPES.START_POINT]: this.startPoint,
+        [POINT_TYPES.CONSTROL_POINT_1]: this.controlPoint1,
+        [POINT_TYPES.CONSTROL_POINT_2]: this.controlPoint2,
+        [POINT_TYPES.END_POINT]: this.endPoint,
+      }
+      if (pointMap[this.draggingPointType]) {
+        pointMap[this.draggingPointType].x =  position?.x
+        pointMap[this.draggingPointType].y =  position?.y
+      }
+    }
+    handleDrawing(position, state) {}
+
+    handleStartPointClick(position) {
+      const { x, y } = position
+      this.startPoint.x = x
+      this.startPoint.y = y
+      this.drawingStateManager.change(DRAWING_STATUS.CONSTROL_POINT_1)
+    }
+    handleControlPoint1Click(position) {
+      const { x, y } = position
+      if (pointInCircle(position, this.startPoint)) {
+        this.draggingPointType = POINT_TYPES.START_POINT
+        return
       } 
+      this.controlPoint1.x = x
+      this.controlPoint1.y = y
+      this.drawingStateManager.change(DRAWING_STATUS.CONSTROL_POINT_2)
     }
-    pathString = [moveToPath, ...linePaths].join(' ')
+    handleControlPoint2Click(position) {
+      const { x, y } = position
+      if (pointInCircle(position, this.startPoint)) {
+        this.draggingPointType = POINT_TYPES.START_POINT
+        return
+      }  else if (pointInCircle(position, this.controlPoint1)) {
+        this.draggingPointType = POINT_TYPES.CONSTROL_POINT_1
+        return
+      }
+      this.controlPoint2.x = x
+      this.controlPoint2.y = y
+      this.drawingStateManager.change(DRAWING_STATUS.END_POINT)
+    }
+    
+    handleEndPointClick(position) {
+      const { x, y } = position
+      if (pointInCircle(position, this.startPoint)) {
+        this.draggingPointType = POINT_TYPES.START_POINT
+        return
+      }  else if (pointInCircle(position, this.controlPoint1)) {
+        this.draggingPointType = POINT_TYPES.CONSTROL_POINT_1
+        return
+      } else if (pointInCircle(position, this.controlPoint2)) {
+        this.draggingPointType = POINT_TYPES.CONSTROL_POINT_2
+        return
+      }
+      this.endPoint.x = x
+      this.endPoint.y = y
+      this.drawingStateManager.change(DRAWING_STATUS.COMPLETE)
+    }
 
-    const pathEl = createSvgElement('path', {
-      d: pathString,
-      stroke: guidelineColor,
-      'stroke-width': guidelineWidth,
-      fill: 'none'
-    })
-    this.svg.appendChild(pathEl)
+    handleCompleteClick(position) {
+      if (pointInCircle(position, this.startPoint)) {
+        this.draggingPointType = POINT_TYPES.START_POINT
+      }  else if (pointInCircle(position, this.controlPoint1)) {
+        this.draggingPointType = POINT_TYPES.CONSTROL_POINT_1
+      } else if (pointInCircle(position, this.controlPoint2)) {
+        this.draggingPointType = POINT_TYPES.CONSTROL_POINT_2
+      } else if (pointInCircle(position, this.endPoint)) {
+        this.draggingPointType = POINT_TYPES.END_POINT
+      }
+    }
+    resetPoints() {
+      this.startPoint = { ...this.startPoint, ...{ x: 0, y: 0 } }
+      this.controlPoint1 = { ...this.controlPoint1, ...{ x: 0, y: 0 } }
+      this.controlPoint2 = { ...this.controlPoint2, ...{ x: 0, y: 0 } }
+      this.endPoint = { ...this.endPoint, ...{ x: 0, y: 0 } }
+
+    }
+    getPoints() {
+      return [
+        this.startPoint,
+        this.controlPoint1,
+        this.controlPoint2,
+        this.endPoint
+      ]
+    }
+
+    update() {}
+    draw() {}
+    animate(animator) {}
+    reset() {}
+    destroy() {}
+
+    isEmptyPoint(point) {
+      return point?.x === 0 && point?.y === 0
+    }
+    _generatePoint({ x= 0, y = 0, radius = 8, color = '#000'} = {}) {
+      console.log(color)
+      return {
+        x,
+        y,
+        radius,
+        color
+      }
+    }
   }
 
-  drawSegmentByPoint(point, position) {
-    const points = [
-      this.startPoint,
-      this.controlPoint1,
-      this.controlPoint2
-    ]
+  // Canvas渲染绘制策略类
+  class CanvasDrawingStrategy extends DrawingStrategy {
+    constructor(canvas) {
+      super()
+      this.canvas = canvas
+      this.ctx = canvas.getContext('2d')
+      this.boundHandleMouseDown = this.handleMouseDown.bind(this)
+      this.boundHandleMouseMove = this.handleMouseMove.bind(this)
+      this.boundHandleMouseUp = this.handleMouseUp.bind(this)
+      this._bindEvent()
+    }
 
-    const drawingPoints = [
-      ...points.slice(0, points.indexOf(point) + 1),
-      position
-    ]
-    this.drawGuideline(drawingPoints)
+    animate(animator) {
+      this.draw()
+      this.drawAnimator(animator)
+    }
+    
+    reset() {
+      this.drawingStateManager.reset()
+      this.resetPoints()
+      this.clear()
+    }
+    
+    draw() {
+      const { ctx, startPoint, controlPoint1, controlPoint2, endPoint } = this 
+      const currentState = this.drawingStateManager.state
+      const drawPoints = [startPoint, controlPoint1, controlPoint2, endPoint]
+
+      this.clear()
+
+      if (!this.isEmptyPoint(startPoint) && !this.isEmptyPoint(controlPoint1)) {
+        this.drawGuideline(drawPoints)
+      }
+      
+
+      if (currentState === DRAWING_STATUS.COMPLETE) {
+        this.drawBezierCurve(drawPoints)
+      }
+
+      drawPoints.forEach(point => {
+        if (!this.isEmptyPoint(point)) {
+          this.drawCircle(point)
+        }
+      })
+    }
+    drawAnimator(animator) {
+      const { type = '' } = animator
+
+      switch (type) {
+        case 'circle': 
+          this.drawCircle(animator)
+          break
+        default: 
+          console.log('The type is unknown')
+      }
+    }
+
+    drawGuideline(points = []) {
+      const { ctx, guidelineWidth, guidelineColor } = this
+      if (points.length < 2) {
+        return
+      }
+
+      ctx.beginPath()
+      ctx.moveTo(points[0]?.x, points[0]?.y)
+
+      for (let i = 1; i < points.length; i++) {
+        const point = points[i]
+        if (!this.isEmptyPoint(point)) {
+          ctx.lineTo(point.x, point.y)
+        }
+      }
+
+      ctx.lineWidth = guidelineWidth
+      ctx.strokeStyle = guidelineColor
+      ctx.stroke()
+    }
+
+    drawSegmentByPoint(point, position) {
+      const points = [
+        this.startPoint,
+        this.controlPoint1,
+        this.controlPoint2
+      ]
+
+      const drawingPoints = [
+        ...points.slice(0, points.indexOf(point) + 1),
+        position
+      ]
+      this.drawGuideline(drawingPoints)
+    }
+
+    drawBezierCurve(points = []) {
+      const { ctx, bezierCurveWidth, bezierCurveColor } = this
+      ctx.beginPath()
+      ctx.moveTo(points[0]?.x, points[0]?.y)
+      ctx.bezierCurveTo(points[1].x, points[1].y, points[2].x, points[2].y, points[3].x, points[3].y)
+      ctx.lineWidth = bezierCurveWidth
+      ctx.strokeStyle = bezierCurveColor
+      ctx.stroke()
+    }
+
+    drawCircle(point) {
+      const { ctx } = this
+      ctx.beginPath()
+      ctx.arc(point.x, point.y, point.radius, 0, 2 * Math.PI)
+      ctx.fillStyle = point.color
+      ctx.fill()
+    }
+
+    clear() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    }
+
+    handleMouseDown(event) {
+      const currentState = this.drawingStateManager.state
+      const mousePosition = getMousePosition(event)
+      this.drawingStateManager.states[currentState].onMousedown(mousePosition)
+      this.draw()
+      event.preventDefault()
+    }
+    handleMouseMove(event) {
+      const mousePosition = getMousePosition(event)
+      const currentState = this.drawingStateManager.state
+      if (this.draggingPointType === POINT_TYPES.NONE && 
+        (currentState === DRAWING_STATUS.START_POINT || currentState === DRAWING_STATUS.COMPLETE)) {
+        return 
+      }
+
+      this.draw()
+
+      if (this.draggingPointType !== POINT_TYPES.NONE) {
+        this.handleDragging(mousePosition)
+      } else {
+        this.handleDrawing(mousePosition, currentState)
+      }
+      event.preventDefault()
+    }
+
+    handleDrawing(position, status) {
+      if (status === DRAWING_STATUS.CONSTROL_POINT_1 && !this.isEmptyPoint(this.startPoint)) {
+        this.drawSegmentByPoint(this.startPoint, position)
+      } else if (status === DRAWING_STATUS.CONSTROL_POINT_2 && !this.isEmptyPoint(this.controlPoint1)) {
+        this.drawSegmentByPoint(this.controlPoint1, position)
+      } else if (status === DRAWING_STATUS.END_POINT && !this.isEmptyPoint(this.controlPoint2)) {
+        this.drawSegmentByPoint(this.controlPoint2, position)
+      }
+    }
+
+    _bindEvent() {
+      const { canvas } = this
+      canvas.addEventListener('mousedown', this.boundHandleMouseDown)
+      canvas.addEventListener('mousemove', this.boundHandleMouseMove)
+      canvas.addEventListener('mouseup', this.boundHandleMouseUp)
+      canvas.addEventListener('touchstart', this.boundHandleMouseDown)
+      canvas.addEventListener('touchmove', this.boundHandleMouseMove)
+      canvas.addEventListener('touchend', this.boundHandleMouseUp)
+    }
+    _removeEvent() {
+      const { canvas } = this
+      canvas.removeEventListener('mousedown', this.boundHandleMouseDown)
+      canvas.removeEventListener('mousemove', this.boundHandleMouseMove)
+      canvas.removeEventListener('mouseup', this.boundHandleMouseUp)
+      canvas.removeEventListener('touchstart', this.boundHandleMouseDown)
+      canvas.removeEventListener('touchmove', this.boundHandleMouseMove)
+      canvas.removeEventListener('touchend', this.boundHandleMouseUp)
+    }
+
+    destroy() {
+      this.reset()
+      this._removeEvent()
+    }
   }
 
-  drawBezierCurve(points = []) {
-    const { ctx, bezierCurveWidth, bezierCurveColor } = this
-    let moveToPath = `M${points[0].x} ${points[0].y}`
-    let linePaths = [
-      `C${points[1].x} ${points[1].y}`,
-      `${points[2].x} ${points[2].y}`,
-      `${points[3].x} ${points[3].y}`
-    ]
-    const pathString = [moveToPath, ...linePaths].join(',')
+  // Svg渲染绘制策略类
+  class SvgDrawingStrategy extends DrawingStrategy {
+    constructor(canvas) {
+      super()
+      this.svg = svg
+      this.boundHandleMouseDown = this.handleMouseDown.bind(this)
+      this.boundHandleMouseMove = this.handleMouseMove.bind(this)
+      this.boundHandleMouseUp = this.handleMouseUp.bind(this)
+      this._bindEvent()
+    }
 
-    const pathEl = createSvgElement('path', {
+    animate(animator) {
+      this.draw()
+      this.drawAnimator(animator)
+    }
+    
+    reset() {
+      this.drawingStateManager.reset()
+      this._removeEvent()
+      this.resetPoints()
+      this.clear()
+    }
+
+    draw() {
+      const { ctx, startPoint, controlPoint1, controlPoint2, endPoint } = this 
+      const currentState = this.drawingStateManager.state
+      const drawPoints = [startPoint, controlPoint1, controlPoint2, endPoint]
+
+      this.clear()
+
+      if (!this.isEmptyPoint(startPoint) && !this.isEmptyPoint(controlPoint1)) {
+        this.drawGuideline(drawPoints)
+      }
+
+      if (currentState === DRAWING_STATUS.COMPLETE) {
+        this.drawBezierCurve(drawPoints)
+      }
+
+      drawPoints.forEach(point => {
+        if (!this.isEmptyPoint(point)) {
+          this.drawCircle(point)
+        }
+      })
+    }
+
+    drawAnimator(animator) {
+      const { type = '' } = animator
+
+      switch (type) {
+        case 'circle': 
+          this.drawCircle(animator)
+          break
+        default: 
+          console.log('The type is unknown')
+      }
+    }
+
+    drawGuideline(points = []) {
+      const { ctx, guidelineWidth, guidelineColor } = this
+
+      let moveToPath = `M${points[0].x} ${points[0].y}`
+      let linePaths = []
+      let pathString = ''
+
+      // L${points[1].x} ${points[1].y} L${points[2]?.x} ${points[2]?.y} L${points[3]?.x} ${points[3]?.y}
+      for (let i = 1; i < points.length; i++) {
+        const point = points[i]
+        if (!this.isEmptyPoint(point)) {
+          linePaths.push(`L${point.x} ${point.y}`)
+        } 
+      }
+      pathString = [moveToPath, ...linePaths].join(' ')
+
+      const pathEl = createSvgElement('path', {
         d: pathString,
-        stroke: bezierCurveColor,
-        'stroke-width': bezierCurveWidth,
+        stroke: guidelineColor,
+        'stroke-width': guidelineWidth,
         fill: 'none'
-    })
-    this.svg.appendChild(pathEl)
-  }
-
-  drawCircle(point) {
-    const circleEl = createSvgElement('circle', {
-      cx: point.x,
-      cy: point.y,
-      r: point.radius,
-      fill: point.color
-    })
-    this.svg.appendChild(circleEl)
-  }
-
-  clear() {
-    this.svg.innerHTML = ''
-  }
-
-  
-  handleMouseDown(event) {
-    const currentState = this.drawingStateManager.state
-    const mousePosition = getMousePosition(event)
-    this.drawingStateManager.states[currentState].onMousedown(mousePosition)
-    this.draw()
-  }
-  handleMouseMove(event) {
-    const mousePosition = getMousePosition(event)
-    const currentState = this.drawingStateManager.state
-
-    if (this.draggingPointType === POINT_TYPES.NONE && 
-      (currentState === DRAWING_STATUS.START_POINT || currentState === DRAWING_STATUS.COMPLETE)) {
-      return 
+      })
+      this.svg.appendChild(pathEl)
     }
 
-    this.draw()
+    drawSegmentByPoint(point, position) {
+      const points = [
+        this.startPoint,
+        this.controlPoint1,
+        this.controlPoint2
+      ]
 
-    if (this.draggingPointType !== POINT_TYPES.NONE) {
-      this.handleDragging(mousePosition)
+      const drawingPoints = [
+        ...points.slice(0, points.indexOf(point) + 1),
+        position
+      ]
+      this.drawGuideline(drawingPoints)
+    }
+
+    drawBezierCurve(points = []) {
+      const { ctx, bezierCurveWidth, bezierCurveColor } = this
+      let moveToPath = `M${points[0].x} ${points[0].y}`
+      let linePaths = [
+        `C${points[1].x} ${points[1].y}`,
+        `${points[2].x} ${points[2].y}`,
+        `${points[3].x} ${points[3].y}`
+      ]
+      const pathString = [moveToPath, ...linePaths].join(',')
+
+      const pathEl = createSvgElement('path', {
+          d: pathString,
+          stroke: bezierCurveColor,
+          'stroke-width': bezierCurveWidth,
+          fill: 'none'
+      })
+      this.svg.appendChild(pathEl)
+    }
+
+    drawCircle(point) {
+      const circleEl = createSvgElement('circle', {
+        cx: point.x,
+        cy: point.y,
+        r: point.radius,
+        fill: point.color
+      })
+      this.svg.appendChild(circleEl)
+    }
+
+    clear() {
+      this.svg.innerHTML = ''
+    }
+
+    
+    handleMouseDown(event) {
+      const currentState = this.drawingStateManager.state
+      const mousePosition = getMousePosition(event)
+      this.drawingStateManager.states[currentState].onMousedown(mousePosition)
+      this.draw()
+    }
+    handleMouseMove(event) {
+      const mousePosition = getMousePosition(event)
+      const currentState = this.drawingStateManager.state
+
+      if (this.draggingPointType === POINT_TYPES.NONE && 
+        (currentState === DRAWING_STATUS.START_POINT || currentState === DRAWING_STATUS.COMPLETE)) {
+        return 
+      }
+
+      this.draw()
+
+      if (this.draggingPointType !== POINT_TYPES.NONE) {
+        this.handleDragging(mousePosition)
+      } else {
+        this.handleDrawing(mousePosition, currentState)
+      }
+    }
+
+    handleDrawing(position, status) {
+      if (status === DRAWING_STATUS.CONSTROL_POINT_1 && !this.isEmptyPoint(this.startPoint)) {
+        this.drawSegmentByPoint(this.startPoint, position)
+      } else if (status === DRAWING_STATUS.CONSTROL_POINT_2 && !this.isEmptyPoint(this.controlPoint1)) {
+        this.drawSegmentByPoint(this.controlPoint1, position)
+      } else if (status === DRAWING_STATUS.END_POINT && !this.isEmptyPoint(this.controlPoint2)) {
+        this.drawSegmentByPoint(this.controlPoint2, position)
+      }
+    }
+
+    _bindEvent() {
+      const { svg } = this
+      svg.addEventListener('mousedown', this.boundHandleMouseDown)
+      svg.addEventListener('mousemove', this.boundHandleMouseMove)
+      svg.addEventListener('mouseup', this.boundHandleMouseUp)
+      
+      svg.addEventListener('touchstart', this.boundHandleMouseDown)
+      svg.addEventListener('touchmove', this.boundHandleMouseMove)
+      svg.addEventListener('touchend', this.boundHandleMouseUp)
+    }
+    _removeEvent() {
+      const { svg } = this
+      svg.removeEventListener('mousedown', this.boundHandleMouseDown)
+      svg.removeEventListener('mousemove', this.boundHandleMouseMove)
+      svg.removeEventListener('mouseup', this.boundHandleMouseUp)
+      
+      svg.removeEventListener('touchstart', this.boundHandleMouseDown)
+      svg.removeEventListener('touchmove', this.boundHandleMouseMove)
+      svg.removeEventListener('touchend', this.boundHandleMouseUp)
+    }
+
+    destroy() {
+      this.reset()
+      this._removeEvent()
+    }
+  }
+
+
+  // 绘制状态管理器
+  class DrawingStateManager {
+    constructor() {
+      this.current = DRAWING_STATUS.START_POINT
+      this.actions = {}
+    }
+    addActions(actions) {
+      this.actions = actions
+    }
+
+    change(state) {
+      if (this.current === state) {
+        return
+      }
+      this.current = state
+    }
+
+    reset() {
+      this.current = DRAWING_STATUS.START_POINT
+    }
+
+    get state() {
+      return this.current
+    }
+
+    get states() {
+      return this.actions
+    }
+
+  }
+
+  // main
+  const canvas = document.getElementById('canvas')
+  const svg = document.getElementById('svg')
+  const moveButtonEl = document.getElementById('moveButton')
+  const resetButtonEl = document.getElementById('resetButton')
+  const modeSelectEl = document.getElementById('modeSelect')
+
+  let currentMode = DRAWING_DEFAULT_STRATEGY
+
+  // 初始化运动小球类
+  const movingCircleAnimator = new MovingCircleAnimator({
+    duration: 1500
+  })
+
+  // 初始化三次贝塞尔曲线控制器
+  const cubicBezierController = new CubicBezierController({ 
+    mode: currentMode,
+    createDrawingFactory,
+    movingAnimator: movingCircleAnimator
+  })
+
+
+  // UI按钮和事件操作
+  modeSelectEl.addEventListener('change', handleModeChange)
+  moveButtonEl.addEventListener('click', handleMoveClick)
+  resetButtonEl.addEventListener('click', handleResetClick)
+
+  function handleModeChange() {
+    const selectedMode = event.target.value
+
+    if (selectedMode === DRAWING_STRATEGY_CANVAS) {
+      svg.style.display = 'none'
+      canvas.style.display = 'block'
     } else {
-      this.handleDrawing(mousePosition, currentState)
+      canvas.style.display = 'none'
+      svg.style.display = 'block'
     }
+    cubicBezierController.switch(selectedMode)
+    currentMode = selectedMode
   }
 
-  handleDrawing(position, status) {
-    if (status === DRAWING_STATUS.CONSTROL_POINT_1 && !this.isEmptyPoint(this.startPoint)) {
-      this.drawSegmentByPoint(this.startPoint, position)
-    } else if (status === DRAWING_STATUS.CONSTROL_POINT_2 && !this.isEmptyPoint(this.controlPoint1)) {
-      this.drawSegmentByPoint(this.controlPoint1, position)
-    } else if (status === DRAWING_STATUS.END_POINT && !this.isEmptyPoint(this.controlPoint2)) {
-      this.drawSegmentByPoint(this.controlPoint2, position)
+  function handleMoveClick() {
+    cubicBezierController.play()
+  }
+
+  function handleResetClick() {
+    cubicBezierController.reset()
+  }
+
+  // helper辅助工具方法
+  function getMousePosition(event) {
+    let clientX, clientY;
+
+    // 如果是触摸
+    if (event.touches) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    } else {
+      clientX = event.clientX;
+      clientY = event.clientY;
     }
+
+    const rect = (currentMode === DRAWING_STRATEGY_CANVAS ? canvas : svg).getBoundingClientRect();
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    };
   }
 
-  _bindEvent() {
-    const { svg } = this
-    svg.addEventListener('mousedown', this.boundHandleMouseDown)
-    svg.addEventListener('mousemove', this.boundHandleMouseMove)
-    svg.addEventListener('mouseup', this.boundHandleMouseUp)
-  }
-  _removeEvent() {
-    const { svg } = this
-    svg.removeEventListener('mousedown', this.boundHandleMouseDown)
-    svg.removeEventListener('mousemove', this.boundHandleMouseMove)
-    svg.removeEventListener('mouseup', this.boundHandleMouseUp)
+
+  function pointInCircle(position, circle) {
+    const dx = position?.x - circle?.x
+    const dy = position?.y - circle?.y
+    return dx * dx + dy * dy <= circle.radius * circle.radius
   }
 
-  destroy() {
-    this.reset()
-    this._removeEvent()
-  }
-}
-
-
-// 绘制状态管理器
-class DrawingStateManager {
-  constructor() {
-    this.current = DRAWING_STATUS.START_POINT
-    this.actions = {}
-  }
-  addActions(actions) {
-    this.actions = actions
+  function getBezierCurvePoint(t, p0, p1, p2, p3) {
+    const t2 = Math.pow(t, 2)
+    const t3 = Math.pow(t, 3)
+    return (p0 * Math.pow((1 - t), 3)) + (3 * p1 * t * Math.pow((1 - t), 2)) + (3 * p2 * t2 * (1 - t)) + (p3 * t3)
   }
 
-  change(state) {
-    if (this.current === state) {
-      return
+  function createSvgElement(tagName, attributes) {
+    const element = document.createElementNS('http://www.w3.org/2000/svg', tagName)
+    for (const attribute in attributes) {
+      element.setAttribute(attribute, attributes[attribute])
     }
-    this.current = state
+    return element
   }
-
-  reset() {
-    this.current = DRAWING_STATUS.START_POINT
-  }
-
-  get state() {
-    return this.current
-  }
-
-  get states() {
-    return this.actions
-  }
-
-}
-
-// main
-const canvas = document.getElementById('canvas')
-const svg = document.getElementById('svg')
-const moveButtonEl = document.getElementById('moveButton')
-const resetButtonEl = document.getElementById('resetButton')
-const modeSelectEl = document.getElementById('modeSelect')
-
-let currentMode = DRAWING_DEFAULT_STRATEGY
-
-// 初始化运动小球类
-const movingCircleAnimator = new MovingCircleAnimator({
-  duration: 1500
-})
-
-// 初始化三次贝塞尔曲线控制器
-const cubicBezierController = new CubicBezierController({ 
-  mode: currentMode,
-  createDrawingFactory,
-  movingAnimator: movingCircleAnimator
-})
-
-
-// UI按钮和事件操作
-modeSelectEl.addEventListener('change', handleModeChange)
-moveButtonEl.addEventListener('click', handleMoveClick)
-resetButtonEl.addEventListener('click', handleResetClick)
-
-function handleModeChange() {
-  const selectedMode = event.target.value
-
-  if (selectedMode === DRAWING_STRATEGY_CANVAS) {
-    svg.style.display = 'none'
-    canvas.style.display = 'block'
-  } else {
-    canvas.style.display = 'none'
-    svg.style.display = 'block'
-  }
-  cubicBezierController.switch(selectedMode)
-  currentMode = selectedMode
-}
-
-function handleMoveClick() {
-  cubicBezierController.play()
-}
-
-function handleResetClick() {
-  cubicBezierController.reset()
-}
-
-// helper辅助工具方法
-function getMousePosition(event) {
-  const rect = (currentMode === DRAWING_STRATEGY_CANVAS ? canvas : svg).getBoundingClientRect()
-  return {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-  }
-}
-
-function pointInCircle(position, circle) {
-  const dx = position?.x - circle?.x
-  const dy = position?.y - circle?.y
-  return dx * dx + dy * dy <= circle.radius * circle.radius
-}
-
-function getBezierCurvePoint(t, p0, p1, p2, p3) {
-  const t2 = Math.pow(t, 2)
-  const t3 = Math.pow(t, 3)
-  return (p0 * Math.pow((1 - t), 3)) + (3 * p1 * t * Math.pow((1 - t), 2)) + (3 * p2 * t2 * (1 - t)) + (p3 * t3)
-}
-
-function createSvgElement(tagName, attributes) {
-  const element = document.createElementNS('http://www.w3.org/2000/svg', tagName)
-  for (const attribute in attributes) {
-    element.setAttribute(attribute, attributes[attribute])
-  }
-  return element
-}
+})();
 
 ```
 :::
 
 
-#### 路径动画原理
+#### 总结路径动画原理
 在上述代码和演示中，我们实现了一个同时支持`SVG`和`Canvas`渲染的小球跟随路径（三次贝塞尔曲线）运动的动画。无论是`SVG`还是`Canvas`渲染，都需要经过以下几个步骤：
 
 1. 首先，需要定义三次贝塞尔曲线的`四个控制点（起始点、两个控制点和终点）`。
@@ -1119,9 +1181,9 @@ function createSvgElement(tagName, attributes) {
 
 ### 缓动动画
 
-`缓动动画（Easing Animation）`在日常开发中非常常见，它主要**用于控制和调整动画的速率**，使动画呈现出更自然、更流畅的效果。它可以应用于`CSS3动画`和`JavaScript动画`。下面我们通过简单的应用例子来看看基本的用法。
+`缓动动画（Easing Animation）`在日常开发中非常常见，它主要**用于控制和调整动画的速率**，使动画呈现出更平滑流畅的过渡效果。它可以应用于`CSS3动画`和`JavaScript动画`。下面我们通过简单的应用例子来看看基本的用法。
 
-在`CSS3动画`中通过设置`transition-timing-function`或`animation-timing-function`属性来为动画或过渡效果指定一个自定义的三次贝塞尔曲线。
+在`CSS3动画`中，通过设置`transition-timing-function`或`animation-timing-function`属性来为动画或过渡效果指定一个自定义的三次贝塞尔曲线。
 比如，通过[cubic-bezier.com](cubic-bezier.com/)可视化工具生成一个由**快到慢**速类似`ease-out`缓动效果的三次贝塞尔控制点值。
 ```css
 animation-timing-function: cubic-bezier(.13,1.12,.6,1);
@@ -1273,241 +1335,244 @@ button:active {
 <button id="startAnimation">播放动画</button>
 ```
 ```javascript
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const startAnimation = document.getElementById('startAnimation');
+(function() {
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const startAnimation = document.getElementById('startAnimation');
 
-const p0 = { x: 100, y: 450 };
-const p1 = { x: 160, y: 140 };
-const p2 = { x: 540, y: 380 };
-const p3 = { x: 630, y: 100 };
-
-
-const xCoords = [p0.x, p1.x, p2.x, p3.x]
-const yCoords = [p0.y, p1.y, p2.y, p3.y]
-
-const { p1: rp1, p2: rp2 } = coordsToEasingRatio(p0, p1, p2, p3);
-
-const cubicBezierFunc = cubicBezier(rp1.x, rp1.y, rp2.x, rp2.y);
-
-let animationProgress = 0;
-let rafId;
-let aniamtionStartTime = 0
-let duration = 2000
+  const p0 = { x: 100, y: 450 };
+  const p1 = { x: 160, y: 140 };
+  const p2 = { x: 540, y: 380 };
+  const p3 = { x: 630, y: 100 };
 
 
-// 1 求出总范围  2 算出当前长度  3 除以总范围 得到 最终的 相对值
-function coordsToEasingRatio(p0, p1, p2, p3) {
-  const xRange = p3.x - p0.x;
-  const yRange = p3.y - p0.y;
+  const xCoords = [p0.x, p1.x, p2.x, p3.x]
+  const yCoords = [p0.y, p1.y, p2.y, p3.y]
 
-  const p1x = (p1.x - p0.x) / xRange;
-  const p1y = (p1.y - p0.y) / yRange;
+  const { p1: rp1, p2: rp2 } = coordsToEasingRatio(p0, p1, p2, p3);
 
-  const p2x = (p2.x - p0.x) / xRange;
-  const p2y = (p2.y - p0.y) / yRange;
+  const cubicBezierFunc = cubicBezier(rp1.x, rp1.y, rp2.x, rp2.y);
 
-  return {
-    p0: { x: 0, y: 0 },
-    p1: { x: p1x, y: p1y },
-    p2: { x: p2x, y: p2y },
-    p3: { x: 1, y: 1 }
+  let animationProgress = 0;
+  let rafId;
+  let aniamtionStartTime = 0
+  let duration = 2000
+
+
+  // 1 求出总范围  2 算出当前长度  3 除以总范围 得到 最终的 相对值
+  function coordsToEasingRatio(p0, p1, p2, p3) {
+    const xRange = p3.x - p0.x;
+    const yRange = p3.y - p0.y;
+
+    const p1x = (p1.x - p0.x) / xRange;
+    const p1y = (p1.y - p0.y) / yRange;
+
+    const p2x = (p2.x - p0.x) / xRange;
+    const p2y = (p2.y - p0.y) / yRange;
+
+    return {
+      p0: { x: 0, y: 0 },
+      p1: { x: p1x, y: p1y },
+      p2: { x: p2x, y: p2y },
+      p3: { x: 1, y: 1 }
+    }
   }
-}
 
-function getBezierCurvePoint(t, ...coords) {
-  return (
-    Math.pow(1 - t, 3) * coords[0] +
-    3 * Math.pow(1 - t, 2) * t * coords[1] +
-    3 * (1 - t) * Math.pow(t, 2) * coords[2] +
-    Math.pow(t, 3) * coords[3]
-  );
-}
+  function getBezierCurvePoint(t, ...coords) {
+    return (
+      Math.pow(1 - t, 3) * coords[0] +
+      3 * Math.pow(1 - t, 2) * t * coords[1] +
+      3 * (1 - t) * Math.pow(t, 2) * coords[2] +
+      Math.pow(t, 3) * coords[3]
+    );
+  }
 
-function drawBezierCurve() {
-  ctx.beginPath();
-  ctx.moveTo(p0.x, p0.y);
-  ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
-  ctx.strokeStyle = 'orange';
-  ctx.lineWidth = 5;
-  ctx.stroke();
-}
+  function drawBezierCurve() {
+    ctx.beginPath();
+    ctx.moveTo(p0.x, p0.y);
+    ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+    ctx.strokeStyle = 'orange';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+  }
 
-function drawBalls() {
-  // 拿到缓动值 0 - 1区间的进度值
-  const preciseProgress = cubicBezierFunc(animationProgress);
-  const impreciseProgress = animationProgress;
+  function drawBalls() {
+    // 拿到缓动值 0 - 1区间的进度值
+    const preciseProgress = cubicBezierFunc(animationProgress);
+    const impreciseProgress = animationProgress;
 
-  // 精确
-  // 常规的缓动直线运动
-  // const preciseBallX = 100 + preciseProgress * 500
-  // const preciseBallY = 300
-  // 路径跟随运动
-  const preciseBallX = getBezierCurvePoint(preciseProgress, ...xCoords)
-  const preciseBallY = getBezierCurvePoint(preciseProgress, ...yCoords)
+    // 精确
+    // 常规的缓动直线运动
+    // const preciseBallX = 100 + preciseProgress * 500
+    // const preciseBallY = 300
+    // 路径跟随运动
+    const preciseBallX = getBezierCurvePoint(preciseProgress, ...xCoords)
+    const preciseBallY = getBezierCurvePoint(preciseProgress, ...yCoords)
 
-  // 不精确
-  const impreciseBallX = getBezierCurvePoint(impreciseProgress, ...xCoords)
-  const impreciseBallY = getBezierCurvePoint(impreciseProgress, ...yCoords)
+    // 不精确
+    const impreciseBallX = getBezierCurvePoint(impreciseProgress, ...xCoords)
+    const impreciseBallY = getBezierCurvePoint(impreciseProgress, ...yCoords)
 
-  ctx.beginPath();
-  ctx.arc(preciseBallX, preciseBallY, 10, 0, 2 * Math.PI);
-  ctx.fillStyle = 'blue';
-  ctx.fill();
+    ctx.beginPath();
+    ctx.arc(preciseBallX, preciseBallY, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = 'blue';
+    ctx.fill();
 
-  ctx.beginPath();
-  ctx.arc(impreciseBallX, impreciseBallY, 10, 0, 2 * Math.PI);
-  ctx.fillStyle = 'red';
-  ctx.fill();
+    ctx.beginPath();
+    ctx.arc(impreciseBallX, impreciseBallY, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = 'red';
+    ctx.fill();
 
-  ctx.font = '16px Arial';
-  ctx.fillStyle = 'blue';
-  ctx.fillText('蓝色: 精确计算t值做缓动运动', 210, 80);
-  ctx.fillStyle = 'red';
-  ctx.fillText('红色: 不精确的t值做不明显的缓动运动', 210, 110);
-
-
-  const straightBallStart = { x: 400, y: 400 };
-  const straightBallEnd = { x: 650, y: 400 };
+    ctx.font = '16px Arial';
+    ctx.fillStyle = 'blue';
+    ctx.fillText('蓝色: 精确计算t值做缓动运动', 210, 80);
+    ctx.fillStyle = 'red';
+    ctx.fillText('红色: 不精确的t值做不明显的缓动运动', 210, 110);
 
 
-  ctx.beginPath();
-  ctx.moveTo(straightBallStart.x, straightBallStart.y);
-  ctx.lineTo(straightBallEnd.x, straightBallEnd.y);
-  ctx.strokeStyle = 'orange';
-  ctx.lineWidth = 5;
-  ctx.stroke();
-
-  const linearBlueBallX = straightBallStart.x + preciseProgress * (straightBallEnd.x - straightBallStart.x);
-  const linearBlueBallY = straightBallStart.y + preciseProgress * (straightBallEnd.y - straightBallStart.y);
-  ctx.beginPath();
-  ctx.arc(linearBlueBallX, linearBlueBallY, 10, 0, 2 * Math.PI);
-  ctx.fillStyle = 'blue';
-  ctx.fill();
-
-  const linearRedBallX = straightBallStart.x + impreciseProgress * (straightBallEnd.x - straightBallStart.x);
-  const linearRedBallY = straightBallStart.y + impreciseProgress * (straightBallEnd.y - straightBallStart.y);
-  ctx.beginPath();
-  ctx.arc(linearRedBallX, linearRedBallY, 10, 0, 2 * Math.PI);
-  ctx.fillStyle = 'red';
-  ctx.fill();
+    const straightBallStart = { x: 400, y: 400 };
+    const straightBallEnd = { x: 650, y: 400 };
 
 
-  ctx.font = '16px Arial';
-  ctx.fillStyle = 'blue';
-  ctx.fillText('蓝色: 直线缓动', 400, 440);
-  ctx.fillStyle = 'red';
-  ctx.fillText('红色: 直线匀速', 400, 465);
+    ctx.beginPath();
+    ctx.moveTo(straightBallStart.x, straightBallStart.y);
+    ctx.lineTo(straightBallEnd.x, straightBallEnd.y);
+    ctx.strokeStyle = 'orange';
+    ctx.lineWidth = 5;
+    ctx.stroke();
 
-}
+    const linearBlueBallX = straightBallStart.x + preciseProgress * (straightBallEnd.x - straightBallStart.x);
+    const linearBlueBallY = straightBallStart.y + preciseProgress * (straightBallEnd.y - straightBallStart.y);
+    ctx.beginPath();
+    ctx.arc(linearBlueBallX, linearBlueBallY, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = 'blue';
+    ctx.fill();
 
-function animate(time) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  animationProgress = Math.max(Math.min((time - aniamtionStartTime) / duration, 1), 0)
+    const linearRedBallX = straightBallStart.x + impreciseProgress * (straightBallEnd.x - straightBallStart.x);
+    const linearRedBallY = straightBallStart.y + impreciseProgress * (straightBallEnd.y - straightBallStart.y);
+    ctx.beginPath();
+    ctx.arc(linearRedBallX, linearRedBallY, 10, 0, 2 * Math.PI);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+
+
+    ctx.font = '16px Arial';
+    ctx.fillStyle = 'blue';
+    ctx.fillText('蓝色: 直线缓动', 400, 440);
+    ctx.fillStyle = 'red';
+    ctx.fillText('红色: 直线匀速', 400, 465);
+
+  }
+
+  function animate(time) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    animationProgress = Math.max(Math.min((time - aniamtionStartTime) / duration, 1), 0)
+
+    drawBezierCurve();
+    drawBalls();
+    if (animationProgress >= 1) {
+      return
+    }
+
+    requestAnimationFrame(animate)
+  }
+
+  startAnimation.addEventListener('click', () => {
+    animationProgress = 0
+    aniamtionStartTime = performance.now()
+    if (rafId) {
+      cancelAnimationFrame(rafId)
+    }
+    rafId = requestAnimationFrame(animate)
+  })
+
+  function cubicBezier(p1x, p1y, p2x, p2y) {
+    const ZERO_LIMIT = 1e-6;
+    // Calculate the polynomial coefficients,
+    // implicit first and last control points are (0,0) and (1,1).
+    const ax = 3 * p1x - 3 * p2x + 1;
+    const bx = 3 * p2x - 6 * p1x;
+    const cx = 3 * p1x;
+
+    const ay = 3 * p1y - 3 * p2y + 1;
+    const by = 3 * p2y - 6 * p1y;
+    const cy = 3 * p1y;
+
+    function sampleCurveDerivativeX(t) {
+      // `ax t^3 + bx t^2 + cx t` expanded using Horner's rule
+      return (3 * ax * t + 2 * bx) * t + cx;
+    }
+
+    function sampleCurveX(t) {
+      return ((ax * t + bx) * t + cx) * t;
+    }
+
+    function sampleCurveY(t) {
+      return ((ay * t + by) * t + cy) * t;
+    }
+
+    // Given an x value, find a parametric value it came from.
+    function solveCurveX(x) {
+      let t2 = x;
+      let derivative;
+      let x2;
+
+      // https://trac.webkit.org/browser/trunk/Source/WebCore/platform/animation
+      // first try a few iterations of Newton's method -- normally very fast.
+      // http://en.wikipedia.org/wikiNewton's_method
+      for (let i = 0; i < 8; i++) {
+        // f(t) - x = 0
+        x2 = sampleCurveX(t2) - x;
+        if (Math.abs(x2) < ZERO_LIMIT) {
+          return t2;
+        }
+        derivative = sampleCurveDerivativeX(t2);
+        // == 0, failure
+        /* istanbul ignore if */
+        if (Math.abs(derivative) < ZERO_LIMIT) {
+          break;
+        }
+        t2 -= x2 / derivative;
+      }
+
+      // Fall back to the bisection method for reliability.
+      // bisection
+      // http://en.wikipedia.org/wiki/Bisection_method
+      let t1 = 1;
+      /* istanbul ignore next */
+      let t0 = 0;
+
+      /* istanbul ignore next */
+      t2 = x;
+      /* istanbul ignore next */
+      while (t1 > t0) {
+        x2 = sampleCurveX(t2) - x;
+        if (Math.abs(x2) < ZERO_LIMIT) {
+          return t2;
+        }
+        if (x2 > 0) {
+          t1 = t2;
+        } else {
+          t0 = t2;
+        }
+        t2 = (t1 + t0) / 2;
+      }
+
+      // Failure
+      return t2;
+    }
+
+    function solve(x) {
+      return sampleCurveY(solveCurveX(x));
+    }
+
+    return solve;
+  }
 
   drawBezierCurve();
   drawBalls();
-  if (animationProgress >= 1) {
-    return
-  }
 
-  requestAnimationFrame(animate)
-}
-
-startAnimation.addEventListener('click', () => {
-  animationProgress = 0
-  aniamtionStartTime = performance.now()
-  if (rafId) {
-    cancelAnimationFrame(rafId)
-  }
-  rafId = requestAnimationFrame(animate)
-})
-
-function cubicBezier(p1x, p1y, p2x, p2y) {
-  const ZERO_LIMIT = 1e-6;
-  // Calculate the polynomial coefficients,
-  // implicit first and last control points are (0,0) and (1,1).
-  const ax = 3 * p1x - 3 * p2x + 1;
-  const bx = 3 * p2x - 6 * p1x;
-  const cx = 3 * p1x;
-
-  const ay = 3 * p1y - 3 * p2y + 1;
-  const by = 3 * p2y - 6 * p1y;
-  const cy = 3 * p1y;
-
-  function sampleCurveDerivativeX(t) {
-    // `ax t^3 + bx t^2 + cx t` expanded using Horner's rule
-    return (3 * ax * t + 2 * bx) * t + cx;
-  }
-
-  function sampleCurveX(t) {
-    return ((ax * t + bx) * t + cx) * t;
-  }
-
-  function sampleCurveY(t) {
-    return ((ay * t + by) * t + cy) * t;
-  }
-
-  // Given an x value, find a parametric value it came from.
-  function solveCurveX(x) {
-    let t2 = x;
-    let derivative;
-    let x2;
-
-    // https://trac.webkit.org/browser/trunk/Source/WebCore/platform/animation
-    // first try a few iterations of Newton's method -- normally very fast.
-    // http://en.wikipedia.org/wikiNewton's_method
-    for (let i = 0; i < 8; i++) {
-      // f(t) - x = 0
-      x2 = sampleCurveX(t2) - x;
-      if (Math.abs(x2) < ZERO_LIMIT) {
-        return t2;
-      }
-      derivative = sampleCurveDerivativeX(t2);
-      // == 0, failure
-      /* istanbul ignore if */
-      if (Math.abs(derivative) < ZERO_LIMIT) {
-        break;
-      }
-      t2 -= x2 / derivative;
-    }
-
-    // Fall back to the bisection method for reliability.
-    // bisection
-    // http://en.wikipedia.org/wiki/Bisection_method
-    let t1 = 1;
-    /* istanbul ignore next */
-    let t0 = 0;
-
-    /* istanbul ignore next */
-    t2 = x;
-    /* istanbul ignore next */
-    while (t1 > t0) {
-      x2 = sampleCurveX(t2) - x;
-      if (Math.abs(x2) < ZERO_LIMIT) {
-        return t2;
-      }
-      if (x2 > 0) {
-        t1 = t2;
-      } else {
-        t0 = t2;
-      }
-      t2 = (t1 + t0) / 2;
-    }
-
-    // Failure
-    return t2;
-  }
-
-  function solve(x) {
-    return sampleCurveY(solveCurveX(x));
-  }
-
-  return solve;
-}
-
-drawBezierCurve();
-drawBalls();
+})();
 ```
 
 :::
@@ -1822,7 +1887,7 @@ console.log(currentValue);
 可以看出来，通过自定义传入两个控制点参数来初始化公式方程，然后调用接收`时间进度值`作为参数的`solve`闭包方法，接着`solveCurveX`方法首先尝试使用`牛顿法`来求解。如果`牛顿法`无法得到满足精度要求的解，将退回到使用`二分法`进行计算，最后，找到`近似t值`后，将其代入贝塞尔曲线公式中，以求出最终的`动画进度值`，也就是`缓动函数值`。
 
 
-##### 缓动动画原理
+##### 总结缓动动画原理
 在上述过程中，我们通过`牛顿迭代法`和`二分法`进行`误差校正`，以解出更接近输入`p（时间进度值）`的`近似t值`。然后，我们将该`t值`代入到三次贝塞尔曲线公式中，进一步求出具体的`运动进度值`，即`缓动函数值`。将`缓动函数值`与`目标运动值`相乘，就得到了当前的`具体运动值`。以`每秒60帧`的帧率更新动画值，随着`时间进度的推移`，一段具有`加速`、`减速`和`匀速`等效果的平滑流畅动画也就展现了出来。
 
 
