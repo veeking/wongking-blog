@@ -4,7 +4,7 @@ title: 页面配置
 # 这是页面的图标
 icon: page
 # 这是侧边栏的顺序
-order: 1
+order: 2
 # 设置作者
 # author: J.Wong
 # 设置写作时间
@@ -17,9 +17,13 @@ tag:
   - 页面配置
   - 使用指南
 # 此页面会在文章列表置顶
-sticky: true
+sticky: false
 # 此页面会出现在文章收藏中
-star: true
+star: false
+# 是否将该文章添加至文章列表中
+article: false
+# 是否将该文章添加至时间线中
+timeline: false
 ---
 
 `more` 注释之前的内容被视为文章摘要。

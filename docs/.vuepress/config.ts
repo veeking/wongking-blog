@@ -9,7 +9,7 @@ export default defineUserConfig({
   dest: "./dist",
   lang: "zh-CN",
   title: "小岛",
-  description: "小岛原住民",
+  description: "己欲立而立人，己欲达而达人",
   shouldPrefetch: false,
   theme,
   // alias: {
